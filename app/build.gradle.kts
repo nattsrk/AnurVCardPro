@@ -9,11 +9,11 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.anur.vcardpro"
+        applicationId = "com.anur.vcardlite"  // ← Changed!
         minSdk = 24
         targetSdk = 34
-        versionCode = 6
-        versionName = "0.6"
+        versionCode = 1  // ← Start from version 1 for Lite
+        versionName = "0.1"  // ← Lite version 0.1
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

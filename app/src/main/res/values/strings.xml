@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Anur VCard Pro</string>
+    <string name="app_name">Anur VCard <Lite></Lite></string>
     <string name="widget_description">Shows your received VCard contacts on home screen</string>
+
 </resources>

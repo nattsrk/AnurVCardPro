@@ -237,9 +237,6 @@ fun VCardApp(activity: MainActivity){
             onContacts = { currentScreen = "contacts" },
             onReceived = { currentScreen = "received" },
             onVCard = { currentScreen = "vcard" },
-            onSCMaster = { currentScreen = "scmaster" },
-            onBuyNewPolicy = { currentScreen = "buy_new_policy" },  // ✅ NEW
-            onInsuranceManager = { currentScreen = "insurance_manager" },
             onLogout = {
                 UserSession.clearSession(activity)
                 currentScreen = "login"
@@ -249,14 +246,7 @@ fun VCardApp(activity: MainActivity){
         "contacts" -> ContactsScreen { currentScreen = "dashboard" }
         "received" -> ReceivedScreen { currentScreen = "dashboard" }
         "vcard" -> VCardScreen { currentScreen = "dashboard" }
-        "scmaster" -> SCMasterScreen(
-            activity = activity,
-            onBack = { currentScreen = "dashboard" }
-        )
-        "buy_new_policy" -> BuyNewPolicyScreen(
-            onBack = { currentScreen = "dashboard" }
-        )
-        "insurance_manager" -> InsuranceManagerScreen { currentScreen = "dashboard" }
+
     }
 }
 
@@ -497,13 +487,13 @@ fun LoginScreen(onLogin: () -> Unit) {
 
                         Text(
                             "This application is a Proof of Concept (POC) developed for demonstration purposes only. *The concepts, ideas, and intellectual property (IP) presented in this app may not be copied, replicated, or used without explicit written permission.\n\n" +
-                        "By using this application, you acknowledge that:\n\n" +
-                                "1. This is a demonstration/prototype application\n" +
-                                "2. All concepts and ideas are protected intellectual property\n" +
-                                "3. This app is intended for authorized employees only\n" +
-                                "4. Any unauthorized use, copying, or distribution is prohibited\n" +
-                                "5. This application should not be considered production-ready and is provided 'as-is' for evaluation purposes only.\n",
-                        fontSize = 14.sp,
+                                    "By using this application, you acknowledge that:\n\n" +
+                                    "1. This is a demonstration/prototype application\n" +
+                                    "2. All concepts and ideas are protected intellectual property\n" +
+                                    "3. This app is intended for authorized employees only\n" +
+                                    "4. Any unauthorized use, copying, or distribution is prohibited\n" +
+                                    "5. This application should not be considered production-ready and is provided 'as-is' for evaluation purposes only.\n",
+                            fontSize = 14.sp,
                             color = Color.White,
                             lineHeight = 20.sp,
                             modifier = Modifier.padding(bottom = 24.dp)

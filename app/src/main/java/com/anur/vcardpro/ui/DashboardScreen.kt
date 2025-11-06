@@ -51,9 +51,6 @@ fun DashboardScreen(
     onContacts: () -> Unit,
     onReceived: () -> Unit,
     onVCard: () -> Unit,
-    onSCMaster: () -> Unit,
-    onBuyNewPolicy: () -> Unit,  // ADDED THIS LINE
-    onInsuranceManager: () -> Unit,
     onLogout: () -> Unit
 ){
     val context = LocalContext.current
@@ -103,9 +100,6 @@ fun DashboardScreen(
                 onContacts = onContacts,
                 onReceived = onReceived,
                 onVCard = onVCard,
-                onSCMaster = onSCMaster,
-                onBuyNewPolicy = onBuyNewPolicy,  // ADDED THIS LINE
-                onInsuranceManager = onInsuranceManager,
                 isVisible = isVisible
             )
 
@@ -232,9 +226,6 @@ fun MainActionsSection(
     onContacts: () -> Unit,
     onReceived: () -> Unit,
     onVCard: () -> Unit,
-    onSCMaster: () -> Unit,
-    onBuyNewPolicy: () -> Unit,
-    onInsuranceManager: () -> Unit,
     isVisible: Boolean
 ) {
     AnimatedVisibility(
@@ -309,48 +300,8 @@ fun MainActionsSection(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // Third Row - SC Master + SC Writer
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                EnhancedDashboardCard(
-                    title = "SC Master",
-                    subtitle = "Read DESFire Cards",
-                    icon = Icons.Filled.Star,
-                    backgroundColor = Color(0xFFF3E5F5),
-                    iconColor = Color(0xFF9C27B0),
-                    onClick = onSCMaster,
-                    modifier = Modifier.weight(1f)
-                )
-                EnhancedDashboardCard(  // ADDED THIS CARD
-                    title = "Buy Policy",
-                    subtitle = "Write to Cards",
-                    icon = Icons.Filled.Edit,
-                    backgroundColor = Color(0xFFFFEBEE),
-                    iconColor = Color(0xFFE91E63),
-                    onClick = onBuyNewPolicy,
-                    modifier = Modifier.weight(1f)
-                )
-            }
 
-            Spacer(modifier = Modifier.height(16.dp))
 
-            // Fourth Row - Insurance Manager (Full Width)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                EnhancedDashboardCard(
-                    title = "Insurance Manager",
-                    subtitle = "Manage Policies",
-                    icon = Icons.Filled.Person,
-                    backgroundColor = Color(0xFFE8F5E8),
-                    iconColor = Color(0xFF8B5CF6),
-                    onClick = onInsuranceManager,
-                    modifier = Modifier.fillMaxWidth()
-                )
-            }
         }
     }
 }
