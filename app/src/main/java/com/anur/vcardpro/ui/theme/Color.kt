@@ -25,10 +25,11 @@ val TextWhite = Color(0xFFFFFFFF)
 // Status Colors
 val SuccessGreen = Color(0xFF10B981)
 val WarningOrange = Color(0xFFF59E0B)
-val ErrorRed = Color(0xFFEF4444)
+val ErrorRed = Color(0xFF7F1D1D)
 val InfoBlue = Color(0xFF8B5CF6)
 
 // Neutral Colors
 val GrayLight = Color(0xFFD1D5DB)
 val GrayMedium = Color(0xFF9CA3AF)
 val GrayDark = Color(0xFF4B5563)
+

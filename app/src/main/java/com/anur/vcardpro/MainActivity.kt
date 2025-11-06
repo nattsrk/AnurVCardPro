@@ -238,8 +238,6 @@ fun VCardApp(activity: MainActivity){
             onReceived = { currentScreen = "received" },
             onVCard = { currentScreen = "vcard" },
             onSCMaster = { currentScreen = "scmaster" },
-            onBuyNewPolicy = { currentScreen = "buy_new_policy" },  // ✅ NEW
-            onInsuranceManager = { currentScreen = "insurance_manager" },
             onLogout = {
                 UserSession.clearSession(activity)
                 currentScreen = "login"
@@ -253,10 +251,6 @@ fun VCardApp(activity: MainActivity){
             activity = activity,
             onBack = { currentScreen = "dashboard" }
         )
-        "buy_new_policy" -> BuyNewPolicyScreen(
-            onBack = { currentScreen = "dashboard" }
-        )
-        "insurance_manager" -> InsuranceManagerScreen { currentScreen = "dashboard" }
     }
 }
 
