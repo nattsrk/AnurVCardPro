@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:text="📱 Received Contacts"
         android:textStyle="bold"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_white"
         android:textSize="16sp"
         android:gravity="center"
         android:layout_marginBottom="8dp" />
@@ -21,7 +21,7 @@
         android:id="@+id/widget_contacts"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="#FFFFFF"
+        android:textColor="@color/text_white"
         android:textSize="13sp"
         android:lineSpacingMultiplier="1.1"
         android:text="Loading contacts..." />

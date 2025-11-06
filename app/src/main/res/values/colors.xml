@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ANUR Brand Colors - Purple to Pink Gradient -->
+    <color name="primary_purple">#8B5CF6</color>
+    <color name="primary_pink">#EC4899</color>
+    <color name="deep_purple">#7C3AED</color>
+    <color name="light_purple">#A855F7</color>
+    <color name="magenta">#D946EF</color>
+    <color name="light_pink">#F472B6</color>
+
+    <!-- Background Colors -->
+    <color name="background_light">#F9F5FF</color>
+    <color name="background_pink_tint">#FDF2F8</color>
+    <color name="background_white">#FFFFFF</color>
+    <color name="background_gray">#F8F9FA</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#1F2937</color>
+    <color name="text_secondary">#6B7280</color>
+    <color name="text_hint">#9CA3AF</color>
+    <color name="text_white">#FFFFFF</color>
+
+    <!-- Status Colors -->
+    <color name="success_green">#10B981</color>
+    <color name="warning_orange">#F59E0B</color>
+    <color name="error_red">#EF4444</color>
+    <color name="info_blue">#3B82F6</color>
+
+    <!-- Neutral Colors -->
+    <color name="gray_light">#D1D5DB</color>
+    <color name="gray_medium">#9CA3AF</color>
+    <color name="gray_dark">#4B5563</color>
+
+    <!-- Legacy Colors (kept for compatibility) -->
+    <color name="purple_500">#8B5CF6</color>
+    <color name="purple_700">#7C3AED</color>
+    <color name="teal_200">#EC4899</color>
+    <color name="teal_700">#D946EF</color>
+
+    <!-- Android System -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>

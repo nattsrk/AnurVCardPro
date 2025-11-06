@@ -178,8 +178,8 @@ fun ProfileHeroSection(user: User, isVisible: Boolean) {
                 .background(
                     Brush.verticalGradient(
                         listOf(
-                            Color(0xFFFFC1C1).copy(alpha = 0.1f),
-                            Color.Transparent
+                            Color(0xFF8B5CF6), // Purple
+                            Color(0xFFEC4899)  // Pink
                         )
                     )
                 )

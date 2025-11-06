@@ -3,64 +3,34 @@ package com.anur.vcardpro
 import android.content.Context
 
 object UserSession {
-    private const val PREFS_NAME = "VCardApp_Session"
-    private const val KEY_USER_ID = "userId"
-    private const val KEY_USER_NAME = "userName"
-    private const val KEY_USER_EMAIL = "userEmail"
+    var userId: Int = -1
+    var userName: String = ""
+    var userEmail: String = ""
 
-    private var _userId: Int = -1
-    private var _userName: String = ""
-    private var _userEmail: String = ""
+    fun isLoggedIn(): Boolean = userId != -1
 
-    // Public getters
-    var userId: Int
-        get() = _userId
-        set(value) {
-            _userId = value
-        }
-
-    var userName: String
-        get() = _userName
-        set(value) {
-            _userName = value
-        }
-
-    var userEmail: String
-        get() = _userEmail
-        set(value) {
-            _userEmail = value
-        }
-
-    // Save session to SharedPreferences
     fun saveSession(context: Context) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        prefs.edit()
-            .putInt(KEY_USER_ID, _userId)
-            .putString(KEY_USER_NAME, _userName)
-            .putString(KEY_USER_EMAIL, _userEmail)
-            .apply()
+        val prefs = context.getSharedPreferences("VCardApp", Context.MODE_PRIVATE)
+        prefs.edit().apply {
+            putInt("userId", userId)
+            putString("userName", userName)
+            putString("userEmail", userEmail)
+            apply()
+        }
     }
 
-    // Load session from SharedPreferences
     fun loadSession(context: Context) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        _userId = prefs.getInt(KEY_USER_ID, -1)
-        _userName = prefs.getString(KEY_USER_NAME, "") ?: ""
-        _userEmail = prefs.getString(KEY_USER_EMAIL, "") ?: ""
+        val prefs = context.getSharedPreferences("VCardApp", Context.MODE_PRIVATE)
+        userId = prefs.getInt("userId", -1)
+        userName = prefs.getString("userName", "") ?: ""
+        userEmail = prefs.getString("userEmail", "") ?: ""
     }
 
-    // Clear session
     fun clearSession(context: Context) {
-        _userId = -1
-        _userName = ""
-        _userEmail = ""
-
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        userId = -1
+        userName = ""
+        userEmail = ""
+        val prefs = context.getSharedPreferences("VCardApp", Context.MODE_PRIVATE)
         prefs.edit().clear().apply()
-    }
-
-    // Check if user is logged in
-    fun isLoggedIn(): Boolean {
-        return _userId != -1
     }
 }

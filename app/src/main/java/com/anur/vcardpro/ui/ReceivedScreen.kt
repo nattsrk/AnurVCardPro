@@ -1,12 +1,8 @@
 package com.anur.vcardpro.ui
 
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
 import android.content.Context
-import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,9 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,7 +28,6 @@ import com.anur.vcardpro.model.ContactShare
 import com.anur.vcardpro.model.ReceivedContactResponse
 import com.anur.vcardpro.model.VisitorContactData
 import com.anur.vcardpro.network.ApiService
-import com.anur.vcardpro.widget.ReceivedContactsWidget
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.coroutines.launch
@@ -49,7 +42,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 fun ReceivedScreen(onBack: () -> Unit) {
     val context = LocalContext.current
     val contacts = remember { mutableStateListOf<ContactShare>() }
-    val hapticFeedback = LocalHapticFeedback.current
     val coroutineScope = rememberCoroutineScope()
 
     val gson = GsonBuilder()
@@ -75,7 +67,6 @@ fun ReceivedScreen(onBack: () -> Unit) {
                         response.body()?.contacts?.let {
                             contacts.clear()
                             contacts.addAll(it)
-                            saveContactsForWidget(context, it)
                         }
                     } else {
                         Toast.makeText(context, "Failed to get contacts", Toast.LENGTH_SHORT).show()
@@ -122,18 +113,19 @@ fun ReceivedScreen(onBack: () -> Unit) {
                         modifier = Modifier
                             .padding(8.dp)
                             .fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFF6F61)),
+                        colors = CardDefaults.cardColors(containerColor = Color.Transparent),
                         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .combinedClickable(
-                                    onClick = { /* normal tap */ },
-                                    onLongClick = {
-                                        hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
-                                        createContactWidget(context, contact)
-                                    }
+                                .background(
+                                    Brush.horizontalGradient(
+                                        listOf(
+                                            Color(0xFFEC4899), // Pink
+                                            Color(0xFF3B82F6)  // Blue
+                                        )
+                                    )
                                 )
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
@@ -200,65 +192,4 @@ fun ReceivedScreen(onBack: () -> Unit) {
             }
         }
     }
-}
-
-// Helper functions - OUTSIDE the composable
-private fun saveContactsForWidget(context: Context, contacts: List<ContactShare>) {
-    val prefs = context.getSharedPreferences("widget_data", Context.MODE_PRIVATE)
-    val gson = Gson()
-    val json = gson.toJson(contacts)
-
-    prefs.edit()
-        .putString("received_contacts", json)
-        .putLong("last_updated", System.currentTimeMillis())
-        .apply()
-
-    refreshWidget(context)
-}
-
-private fun showWidgetInstructions(context: Context) {
-    Toast.makeText(
-        context,
-        "Long press home screen → Widgets → Add 'Received Contacts'",
-        Toast.LENGTH_LONG
-    ).show()
-}
-
-private fun refreshWidget(context: Context) {
-    val intent = Intent(context, ReceivedContactsWidget::class.java).apply {
-        action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-    }
-
-    val appWidgetManager = AppWidgetManager.getInstance(context)
-    val componentName = ComponentName(context, ReceivedContactsWidget::class.java)
-    val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-    intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, appWidgetIds)
-
-    context.sendBroadcast(intent)
-}
-
-private fun createContactWidget(context: Context, contact: ContactShare) {
-    val prefs = context.getSharedPreferences("contact_widget_data", Context.MODE_PRIVATE)
-    val gson = Gson()
-    val contactJson = gson.toJson(contact)
-
-    prefs.edit()
-        .putString("selected_contact", contactJson)
-        .putLong("widget_created_time", System.currentTimeMillis())
-        .apply()
-
-    val visitorData = contact.visitorContactData?.let {
-        try {
-            gson.fromJson(it, VisitorContactData::class.java)
-        } catch (e: Exception) {
-            null
-        }
-    }
-    val name = visitorData?.name ?: "Unknown"
-
-    Toast.makeText(
-        context,
-        "Widget ready for $name! Long press home screen → Widgets → Add 'Contact Widget'",
-        Toast.LENGTH_LONG
-    ).show()
 }

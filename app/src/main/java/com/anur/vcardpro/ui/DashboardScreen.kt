@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.Notifications
@@ -43,15 +44,18 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import com.anur.vcardpro.UserSession
 
-
+import androidx.compose.material.icons.filled.Add
 @Composable
 fun DashboardScreen(
     onProfile: () -> Unit,
     onContacts: () -> Unit,
     onReceived: () -> Unit,
     onVCard: () -> Unit,
+    onSCMaster: () -> Unit,
+    onBuyNewPolicy: () -> Unit,  // ADDED THIS LINE
+    onInsuranceManager: () -> Unit,
     onLogout: () -> Unit
-) {
+){
     val context = LocalContext.current
     var user by remember { mutableStateOf<User?>(null) }
     var isVisible by remember { mutableStateOf(false) }
@@ -70,8 +74,8 @@ fun DashboardScreen(
             .background(
                 Brush.verticalGradient(
                     listOf(
-                        Color(0xFFFF0000), // Red
-                        Color.Black        // Black
+                        Color(0xFF8B5CF6), // Purple
+                        Color(0xFFEC4899)  // Pink
                     )
                 )
             )
@@ -99,6 +103,9 @@ fun DashboardScreen(
                 onContacts = onContacts,
                 onReceived = onReceived,
                 onVCard = onVCard,
+                onSCMaster = onSCMaster,
+                onBuyNewPolicy = onBuyNewPolicy,  // ADDED THIS LINE
+                onInsuranceManager = onInsuranceManager,
                 isVisible = isVisible
             )
 
@@ -225,6 +232,9 @@ fun MainActionsSection(
     onContacts: () -> Unit,
     onReceived: () -> Unit,
     onVCard: () -> Unit,
+    onSCMaster: () -> Unit,
+    onBuyNewPolicy: () -> Unit,
+    onInsuranceManager: () -> Unit,
     isVisible: Boolean
 ) {
     AnimatedVisibility(
@@ -294,6 +304,51 @@ fun MainActionsSection(
                     iconColor = Color(0xFFFF9800),
                     onClick = onVCard,
                     modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Third Row - SC Master + SC Writer
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                EnhancedDashboardCard(
+                    title = "SC Master",
+                    subtitle = "Read DESFire Cards",
+                    icon = Icons.Filled.Star,
+                    backgroundColor = Color(0xFFF3E5F5),
+                    iconColor = Color(0xFF9C27B0),
+                    onClick = onSCMaster,
+                    modifier = Modifier.weight(1f)
+                )
+                EnhancedDashboardCard(  // ADDED THIS CARD
+                    title = "Buy Policy",
+                    subtitle = "Write to Cards",
+                    icon = Icons.Filled.Edit,
+                    backgroundColor = Color(0xFFFFEBEE),
+                    iconColor = Color(0xFFE91E63),
+                    onClick = onBuyNewPolicy,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Fourth Row - Insurance Manager (Full Width)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                EnhancedDashboardCard(
+                    title = "Insurance Manager",
+                    subtitle = "Manage Policies",
+                    icon = Icons.Filled.Person,
+                    backgroundColor = Color(0xFFE8F5E8),
+                    iconColor = Color(0xFF4CAF50),
+                    onClick = onInsuranceManager,
+                    modifier = Modifier.fillMaxWidth()
                 )
             }
         }
@@ -378,10 +433,9 @@ fun EnhancedDashboardCard(
     }
 }
 
-
 @Composable
 fun LogoutSection(onLogout: () -> Unit, isVisible: Boolean) {
-    val context = LocalContext.current  // ⭐ Get context in @Composable function
+    val context = LocalContext.current
 
     AnimatedVisibility(
         visible = isVisible,
@@ -392,7 +446,6 @@ fun LogoutSection(onLogout: () -> Unit, isVisible: Boolean) {
     ) {
         Button(
             onClick = {
-                // ⭐ Use the context variable from above
                 UserSession.clearSession(context)
                 onLogout()
             },
@@ -401,7 +454,7 @@ fun LogoutSection(onLogout: () -> Unit, isVisible: Boolean) {
                 .height(56.dp),
             shape = RoundedCornerShape(16.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFFF0000) //0xFFDC3545
+                containerColor = Color(0xFF8B5CF6) // PrimaryPurple
             ),
             elevation = ButtonDefaults.buttonElevation(defaultElevation = 8.dp)
         ) {
