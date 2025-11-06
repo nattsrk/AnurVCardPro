@@ -274,7 +274,7 @@ fun MainActionsSection(
                     subtitle = "Phone contacts",
                     icon = Icons.Filled.Phone,
                     backgroundColor = Color(0xFFF0FDF4),
-                    iconColor = Color(0xFF4CAF50),
+                    iconColor = Color(0xFF8B5CF6),
                     onClick = onContacts,
                     modifier = Modifier.weight(1f)
                 )
@@ -292,7 +292,7 @@ fun MainActionsSection(
                     subtitle = "Shared with you",
                     icon = Icons.Filled.Email,
                     backgroundColor = Color(0xFFEFF6FF),
-                    iconColor = Color(0xFF2196F3),
+                    iconColor = Color(0xFF8B5CF6),
                     onClick = onReceived,
                     modifier = Modifier.weight(1f)
                 )
@@ -346,7 +346,7 @@ fun MainActionsSection(
                     subtitle = "Manage Policies",
                     icon = Icons.Filled.Person,
                     backgroundColor = Color(0xFFE8F5E8),
-                    iconColor = Color(0xFF4CAF50),
+                    iconColor = Color(0xFF8B5CF6),
                     onClick = onInsuranceManager,
                     modifier = Modifier.fillMaxWidth()
                 )

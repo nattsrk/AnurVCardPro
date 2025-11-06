@@ -244,7 +244,7 @@ fun ProfileHeroSection(user: User, isVisible: Boolean) {
                 // Status Badge
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = Color(0xFF4CAF50).copy(alpha = 0.1f)
+                    color = Color(0xFF8B5CF6).copy(alpha = 0.1f)
                 ) {
                     Row(
                         modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
@@ -254,13 +254,13 @@ fun ProfileHeroSection(user: User, isVisible: Boolean) {
                             modifier = Modifier
                                 .size(8.dp)
                                 .clip(CircleShape)
-                                .background(Color(0xFF4CAF50))
+                                .background(Color(0xFF8B5CF6))
                         )
                         Spacer(modifier = Modifier.width(6.dp))
                         Text(
                             "Active",
                             style = MaterialTheme.typography.labelMedium,
-                            color = Color(0xFF4CAF50),
+                            color = Color(0xFF8B5CF6),
                             fontWeight = FontWeight.Medium
                         )
                     }
@@ -380,8 +380,8 @@ fun ProfileStatsSection(isVisible: Boolean) {
                         .padding(16.dp),
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
-                    StatItem("23", "Contacts\nShared", Color(0xFF2196F3))
-                    StatItem("7", "Received", Color(0xFF4CAF50))
+                    StatItem("23", "Contacts\nShared", Color(0xFF8B5CF6))
+                    StatItem("7", "Received", Color(0xFF8B5CF6))
                     StatItem("156", "Profile\nViews", Color(0xFFFF9800))
                 }
             }

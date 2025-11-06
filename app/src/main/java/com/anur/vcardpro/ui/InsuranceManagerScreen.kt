@@ -51,6 +51,7 @@ import android.content.Intent
 import android.net.Uri
 import androidx.core.content.FileProvider
 import java.io.File
+import com.anur.vcardpro.ui.theme.*
 import java.io.FileOutputStream
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -390,7 +391,7 @@ fun ClaimStatusTab(policyId: Int) {
                         Button(
                             onClick = { showCreateDialog = true },
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF2196F3)
+                                containerColor = PrimaryPurple
                             )
                         ) {
                             Text("File New Claim")
@@ -414,7 +415,7 @@ fun ClaimStatusTab(policyId: Int) {
                     Button(
                         onClick = { showCreateDialog = true },
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF2196F3)
+                            containerColor = PrimaryPurple
                         ),
                         modifier = Modifier.height(32.dp)
                     ) {
@@ -440,7 +441,7 @@ fun ClaimStatusTab(policyId: Int) {
                         },
                         modifier = Modifier.fillMaxWidth(),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF2196F3)
+                            containerColor = Color(0xFF8B5CF6)
                         )
                     ) {
                         Text(
@@ -588,7 +589,7 @@ private fun TimelineItem(step: TimelineStep, isLast: Boolean) {
                     .clip(CircleShape)
                     .background(
                         when {
-                            step.isCompleted -> Color(0xFF4CAF50)
+                            step.isCompleted -> Color(0xFF8B5CF6)
                             step.isActive -> Color(0xFFFF9800)
                             else -> Color(0xFFE0E0E0)
                         }
@@ -924,9 +925,9 @@ private fun getStatusDescription(status: String): String {
 private fun getClaimStatusColor(status: String): Long {
     return when (status.lowercase()) {
         "pending" -> 0xFFFF9800
-        "approved" -> 0xFF4CAF50
+        "approved" -> 0xFF8B5CF6
         "rejected" -> 0xFFF44336
-        "paid" -> 0xFF2196F3
+        "paid" -> 0xFF8B5CF6
         "cancelled" -> 0xFF757575
         else -> 0xFF757575
     }
@@ -934,7 +935,7 @@ private fun getClaimStatusColor(status: String): Long {
 
 private fun getStatusColor(status: String): Color {
     return when (status.lowercase()) {
-        "active" -> Color(0xFF4CAF50)
+        "active" -> Color(0xFF8B5CF6)
         "inactive", "expired", "cancelled" -> Color(0xFFFF5722)
         else -> Color.Black
     }

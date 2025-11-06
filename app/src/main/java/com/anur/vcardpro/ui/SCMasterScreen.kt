@@ -800,7 +800,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                             backendInsuranceData?.policies?.forEachIndexed { index, policy ->
                                 Card(
                                     modifier = Modifier.fillMaxWidth(),
-                                    colors = CardDefaults.cardColors(containerColor = Color(0xFF2196F3))
+                                    colors = CardDefaults.cardColors(containerColor = Color(0xFF8B5CF6))
                                 ) {
                                     Column(modifier = Modifier.padding(16.dp)) {
                                         Text(
@@ -1064,7 +1064,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                                 Button(
                                                     onClick = { syncCardToBackend() },
                                                     enabled = !isSyncing,
-                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50)),
+                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6)),
                                                     modifier = Modifier.weight(1f)
                                                 ) {
                                                     if (isSyncing) {
@@ -1079,7 +1079,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                                 Button(
                                                     onClick = { syncBackendToCard() },
                                                     enabled = !isSyncing,
-                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF2196F3)),
+                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6)),
                                                     modifier = Modifier.weight(1f)
                                                 ) {
                                                     Text("SYNC TO CARD", fontSize = 12.sp, fontWeight = FontWeight.Bold)
@@ -1097,7 +1097,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                                 text = "✅ DATA IN SYNC",
                                                 fontSize = 16.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color(0xFF4CAF50)
+                                                color = Color(0xFF8B5CF6)
                                             )
                                             Text(
                                                 text = "Card and backend data are synchronized",
@@ -1659,7 +1659,7 @@ fun EnhancedWriteFormSection(
             onClick = onWriteClick,
             modifier = Modifier.fillMaxWidth(),
             enabled = !isWriting,
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4CAF50))
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6))
         ) {
             if (isWriting) {
                 CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White)

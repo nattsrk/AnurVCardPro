@@ -34,6 +34,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.NumberFormat
 import java.util.Locale
+import com.anur.vcardpro.ui.theme.*
 import com.anur.vcardpro.ui.formatCurrency
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,7 +99,7 @@ fun BuyNewPolicyScreen(onBack: () -> Unit) {
         TabRow(
             selectedTabIndex = selectedTab,
             containerColor = Color.White,
-            contentColor = Color(0xFF4CAF50)
+            contentColor = Color(0xFF8B5CF6)
         ) {
             tabs.forEachIndexed { index, title ->
                 Tab(
@@ -116,7 +117,7 @@ fun BuyNewPolicyScreen(onBack: () -> Unit) {
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    CircularProgressIndicator(color = Color(0xFF4CAF50))
+                    CircularProgressIndicator(color = Color(0xFF8B5CF6))
                 }
             }
             errorMessage != null -> {
@@ -228,7 +229,7 @@ fun PolicyProductCard(product: PolicyProduct, onClick: () -> Unit) {
                     color = Color.White,
                     modifier = Modifier
                         .background(
-                            color = if (product.productType == "Life") Color(0xFF8B5CF6) else Color(0xFF2196F3),
+                            color = if (product.productType == "Life") Color(0xFF8B5CF6) else Color(0xFF8B5CF6),
                             shape = RoundedCornerShape(8.dp)
                         )
                         .padding(horizontal = 8.dp, vertical = 4.dp)
@@ -264,7 +265,7 @@ fun PolicyProductCard(product: PolicyProduct, onClick: () -> Unit) {
                     Icon(
                         Icons.Default.CheckCircle,
                         contentDescription = null,
-                        tint = Color(0xFF4CAF50),
+                        tint = Color(0xFF8B5CF6),
                         modifier = Modifier.size(16.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
@@ -290,7 +291,7 @@ fun PolicyProductCard(product: PolicyProduct, onClick: () -> Unit) {
                         formatCurrency(product.basePremium),
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
-                        color = Color(0xFF4CAF50)
+                        color = Color(0xFF8B5CF6)
                     )
                     Text("/year", fontSize = 11.sp, color = Color.Gray)
                 }
@@ -298,7 +299,7 @@ fun PolicyProductCard(product: PolicyProduct, onClick: () -> Unit) {
                 Button(
                     onClick = onClick,
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color(0xFF4CAF50)
+                        containerColor = PrimaryPurple
                     )
                 ) {
                     Text("Customize & Apply")
@@ -420,7 +421,7 @@ fun CustomizePolicyDialog(
                                 formatCurrency(calculatedPremium),
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 18.sp,
-                                color = Color(0xFF4CAF50)
+                                color = Color(0xFF8B5CF6)
                             )
                         }
                     }
@@ -446,7 +447,7 @@ fun CustomizePolicyDialog(
                         },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.buttonColors(
-                            containerColor = Color(0xFF4CAF50)
+                            containerColor = PrimaryPurple
                         )
                     ) {
                         Text("Buy Policy")

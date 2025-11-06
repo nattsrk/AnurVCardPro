@@ -496,15 +496,14 @@ fun LoginScreen(onLogin: () -> Unit) {
                         )
 
                         Text(
-                            "This application is a Proof of Concept (POC) developed for demonstration purposes only. The concepts, ideas, and intellectual property (IP) presented in this app are proprietary to ANUR and may not be copied, replicated, or used without explicit written permission.\n\n" +
-                            "By using this application, you acknowledge that:\n\n" +
-                            "1. This is a demonstration/prototype application\n" +
-                            "2. All concepts and ideas are protected intellectual property\n" +
-                            "3. This app is intended for authorized employees only\n" +
-                            "4. Any unauthorized use, copying, or distribution is prohibited\n" +
-                            "5. ANUR reserves all rights to the concepts and implementation\n\n" +
-                            "This application should not be considered production-ready and is provided 'as-is' for evaluation purposes only.",
-                            fontSize = 14.sp,
+                            "This application is a Proof of Concept (POC) developed for demonstration purposes only. *The concepts, ideas, and intellectual property (IP) presented in this app may not be copied, replicated, or used without explicit written permission.\n\n" +
+                        "By using this application, you acknowledge that:\n\n" +
+                                "1. This is a demonstration/prototype application\n" +
+                                "2. All concepts and ideas are protected intellectual property\n" +
+                                "3. This app is intended for authorized employees only\n" +
+                                "4. Any unauthorized use, copying, or distribution is prohibited\n" +
+                                "5. This application should not be considered production-ready and is provided 'as-is' for evaluation purposes only.\n",
+                        fontSize = 14.sp,
                             color = Color.White,
                             lineHeight = 20.sp,
                             modifier = Modifier.padding(bottom = 24.dp)

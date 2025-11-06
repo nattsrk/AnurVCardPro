@@ -133,9 +133,9 @@ fun SCWriterScreen(activity: MainActivity, onBack: () -> Unit) {
             modifier = Modifier.fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = when {
-                    cardDetected -> Color(0xFF4CAF50) // Green when detected
+                    cardDetected -> Color(0xFF8B5CF6) // Green when detected
                     isWriting -> Color(0xFFFF9800) // Orange when writing
-                    else -> Color(0xFF2196F3) // Blue when ready
+                    else -> Color(0xFF8B5CF6) // Blue when ready
                 }
             )
         ) {
@@ -367,7 +367,7 @@ fun SCWriterScreen(activity: MainActivity, onBack: () -> Unit) {
             enabled = !isWriting,
             colors = ButtonDefaults.buttonColors(
                 containerColor = when {
-                    cardDetected -> Color(0xFF4CAF50) // Green when card detected
+                    cardDetected -> Color(0xFF8B5CF6) // Green when card detected
                     else -> Color(0xFFD32F2F) // Red otherwise
                 }
             )
