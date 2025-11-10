@@ -334,7 +334,6 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
         Toast.makeText(context, "Please tap your NFC card to write missing policies", Toast.LENGTH_SHORT).show()
     }
 
-    // NEW: Function to write backend policies to card (called when card is detected during sync)
     fun syncBackendPoliciesToCard(tag: Tag): String {
         val comparison = syncComparison ?: return "No sync data available"
 
@@ -347,23 +346,15 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
         }
 
         return try {
-            // First read existing card data to preserve it
-            val existingData = try {
-                val ndef = Ndef.get(tag)
-                if (ndef != null) {
-                    ndef.connect()
-                    val ndefMessage = ndef.ndefMessage
-                    ndef.close()
-                    if (ndefMessage != null) {
-                        extractStructuredDataFromRecords(ndefMessage.records)
-                    } else {
-                        ExtractedCardData()
-                    }
-                } else {
-                    ExtractedCardData()
-                }
-            } catch (e: Exception) {
-                ExtractedCardData()
+            // 🔹 USE ALREADY-READ CARD DATA FROM READ MODE
+            // User MUST read card in READ mode before syncing
+            val existingData = extractedData ?: return "Please read the card first in READ mode before syncing"
+
+            // Verify we have card data
+            if (existingData.personalInfo.isEmpty() &&
+                existingData.emergencyContact.isEmpty() &&
+                existingData.insuranceInfo.isEmpty()) {
+                return "No card data found. Please read the card in READ mode first."
             }
 
             // Create records from existing data
@@ -455,18 +446,18 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                 }
                 if (ndefMessage.toByteArray().size > ndef.maxSize) {
                     ndef.close()
-                    return "Data too large for card"
+                    return "Data too large for card (${ndefMessage.toByteArray().size} bytes > ${ndef.maxSize} bytes)"
                 }
                 ndef.writeNdefMessage(ndefMessage)
                 ndef.close()
-                "Successfully synced ${backendOnlyPolicies.size} policies from backend to card!"
+                "Successfully synced ${backendOnlyPolicies.size} new policies! Total: ${existingData.insuranceInfo.size + backendOnlyPolicies.size} policies on card"
             } else {
                 val ndefFormatable = NdefFormatable.get(tag)
                 if (ndefFormatable != null) {
                     ndefFormatable.connect()
                     ndefFormatable.format(ndefMessage)
                     ndefFormatable.close()
-                    "Card formatted and synced with ${backendOnlyPolicies.size} policies from backend!"
+                    "Card formatted and synced with ${backendOnlyPolicies.size} new policies!"
                 } else {
                     "Card is not NDEF compatible"
                 }
@@ -479,14 +470,22 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
     // Handle NFC tag detection
     LaunchedEffect(nfcTag) {
         nfcTag?.let { tag ->
-            if (currentMode == "READ") {
+            if (currentMode == "READ") {                                    // 1 OPEN {
                 val result = handleCardDetection(tag)
                 cardDataStatus = result.first
                 extractedData = result.second
                 cardDetected = true
                 lastTapTime = SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(Date())
 
-            } else if (currentMode == "WRITE") {
+                // ADDED: Update syncComparison with fresh card data if backend data exists
+                backendInsuranceData?.let { backend ->                      // 2 OPEN {
+                    syncComparison = compareCardAndBackendData(
+                        extractedData?.insuranceInfo ?: emptyList(),
+                        backend.policies ?: emptyList()
+                    )
+                }                                                           // 2 CLOSE }
+            }                                                               // 1 CLOSE }
+            else if (currentMode == "WRITE") {
                 if (isWriting) {
                     // Card Personalization - Write data to card
                     writeStatus = "Card detected! Writing structured data..."
@@ -551,6 +550,14 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
             nfcAdapter?.disableForegroundDispatch(activity)
         }
     }
+
+    // Auto-fetch backend data when entering WRITE mode
+    LaunchedEffect(currentMode) {
+        if (currentMode == "WRITE") {
+            fetchBackendInsuranceData()
+        }
+    }
+
 
     Column(
         modifier = Modifier
@@ -1030,7 +1037,37 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                 )
                                 Spacer(modifier = Modifier.height(12.dp))
                             }
+// Around line 1113-1125 (after the current LOAD BACKEND DATA button)
 
+// Load Backend Data Button (if not loaded)
+                            if (backendInsuranceData == null && !isLoadingBackend) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Button(
+                                    onClick = { fetchBackendInsuranceData() },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
+                                ) {
+                                    Text("LOAD BACKEND DATA", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                }
+                            }
+
+// 🔹 ADD THIS NEW CODE HERE 🔹
+// Refresh button (always show when data is loaded)
+                            if (backendInsuranceData != null && !isLoadingBackend) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Button(
+                                    onClick = {
+                                        backendInsuranceData = null
+                                        backendError = null
+                                        syncComparison = null
+                                        fetchBackendInsuranceData()
+                                    },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6))
+                                ) {
+                                    Text("🔄 REFRESH BACKEND DATA", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                                }
+                            }
                             // Sync Comparison and Buttons
                             syncComparison?.let { comparison ->
                                 if (comparison.needsSync) {
