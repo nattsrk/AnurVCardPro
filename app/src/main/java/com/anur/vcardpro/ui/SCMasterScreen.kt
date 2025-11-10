@@ -135,7 +135,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
     var insuranceList by remember {
         mutableStateOf(mutableListOf(
             InsuranceInfo(
-                policyHolder = "Natarajan R",
+                policyHolder = UserSession.userName,
                 age = "53 years",
                 insurer = "SBI Life Insurance",
                 policyType = "Term Life Insurance",
@@ -144,9 +144,9 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                 policyStart = "20/01/1990",
                 policyEnd = "02/02/2030",
                 status = "Active",
-                contact = "nat@tecgs.com",
-                mobile = "+91 9444285425",
-                policyNumber = "POL123456"
+                contact = "user@test.com",
+                mobile = "999999990",
+                policyNumber = "POL-L12009"
             )
         ))
     }
@@ -943,55 +943,10 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                             )
                         }
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Card Personalization Form
-                    EnhancedWriteFormSection(
-                        vCardSlug = vCardSlug,
-                        onVCardSlugChange = { vCardSlug = it },
-                        fullName = fullName,
-                        onFullNameChange = { fullName = it },
-                        phone = phone,
-                        onPhoneChange = { phone = it },
-                        email = email,
-                        onEmailChange = { email = it },
-                        organization = organization,
-                        onOrganizationChange = { organization = it },
-                        jobTitle = jobTitle,
-                        onJobTitleChange = { jobTitle = it },
-                        address = address,
-                        onAddressChange = { address = it },
-                        emergencyName = emergencyName,
-                        onEmergencyNameChange = { emergencyName = it },
-                        emergencyPhone = emergencyPhone,
-                        onEmergencyPhoneChange = { emergencyPhone = it },
-                        bloodGroup = bloodGroup,
-                        onBloodGroupChange = { bloodGroup = it },
-                        emergencyLocation = emergencyLocation,
-                        onEmergencyLocationChange = { emergencyLocation = it },
-                        emergencyRelationship = emergencyRelationship,
-                        onEmergencyRelationshipChange = { emergencyRelationship = it },
-                        insuranceList = insuranceList,
-                        onInsuranceListChange = { insuranceList = it },
-                        isWriting = isWriting,
-                        onWriteClick = {
-                            if (hasValidStructuredData(fullName, phone, email, emergencyName, emergencyPhone, insuranceList)) {
-                                isWriting = true
-                                writeStatus = "Tap your card to write structured data..."
-                                Toast.makeText(context, "Please tap your NFC card now", Toast.LENGTH_SHORT).show()
-                            } else {
-                                Toast.makeText(context, "Please fill at least one complete section", Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    )
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
                     // Data Sync Section
                     Card(
                         modifier = Modifier.fillMaxWidth(),
-                        colors = CardDefaults.cardColors(containerColor = Color(0xFF1976D2))
+                        colors = CardDefaults.cardColors(containerColor = Color(0xFF8B5CF6))
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
@@ -1008,9 +963,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                             )
                         }
                     }
-
                     Spacer(modifier = Modifier.height(16.dp))
-
                     // Data Sync UI
                     Card(
                         modifier = Modifier.fillMaxWidth(),
@@ -1045,7 +998,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                 Button(
                                     onClick = { fetchBackendInsuranceData() },
                                     modifier = Modifier.fillMaxWidth(),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6))
                                 ) {
                                     Text("LOAD BACKEND DATA", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                                 }
@@ -1152,13 +1105,56 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                 Button(
                                     onClick = { fetchBackendInsuranceData() },
                                     modifier = Modifier.fillMaxWidth(),
-                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF1976D2))
+                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6))
                                 ) {
                                     Text("LOAD BACKEND DATA", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
                         }
                     }
+                    Spacer(modifier = Modifier.height(24.dp))
+                    // Card Personalization Form
+                    EnhancedWriteFormSection(
+                        vCardSlug = vCardSlug,
+                        onVCardSlugChange = { vCardSlug = it },
+                        fullName = fullName,
+                        onFullNameChange = { fullName = it },
+                        phone = phone,
+                        onPhoneChange = { phone = it },
+                        email = email,
+                        onEmailChange = { email = it },
+                        organization = organization,
+                        onOrganizationChange = { organization = it },
+                        jobTitle = jobTitle,
+                        onJobTitleChange = { jobTitle = it },
+                        address = address,
+                        onAddressChange = { address = it },
+                        emergencyName = emergencyName,
+                        onEmergencyNameChange = { emergencyName = it },
+                        emergencyPhone = emergencyPhone,
+                        onEmergencyPhoneChange = { emergencyPhone = it },
+                        bloodGroup = bloodGroup,
+                        onBloodGroupChange = { bloodGroup = it },
+                        emergencyLocation = emergencyLocation,
+                        onEmergencyLocationChange = { emergencyLocation = it },
+                        emergencyRelationship = emergencyRelationship,
+                        onEmergencyRelationshipChange = { emergencyRelationship = it },
+                        insuranceList = insuranceList,
+                        onInsuranceListChange = { insuranceList = it },
+                        isWriting = isWriting,
+                        onWriteClick = {
+                            if (hasValidStructuredData(fullName, phone, email, emergencyName, emergencyPhone, insuranceList)) {
+                                isWriting = true
+                                writeStatus = "Tap your card to write structured data..."
+                                Toast.makeText(context, "Please tap your NFC card now", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Please fill at least one complete section", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+
                 }
             }
         }

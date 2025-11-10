@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.draw.clip
 import com.anur.vcardpro.model.LoginResponse
+import com.anur.vcardpro.model.UserResponse  // ✅ ADD THIS
 import com.anur.vcardpro.network.ApiService
 import com.anur.vcardpro.ui.*
 import kotlinx.coroutines.delay
@@ -34,7 +35,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.window.Dialog
-
 import android.content.Intent
 import android.nfc.NfcAdapter
 import android.nfc.Tag
@@ -43,6 +43,7 @@ import android.nfc.NdefRecord
 import android.nfc.tech.Ndef
 import android.nfc.tech.NdefFormatable
 import java.nio.charset.Charset
+import android.app.Activity  // ✅ ADD THIS
 
 class MainActivity : ComponentActivity() {
     // Add this mutable state to hold NFC data
@@ -430,23 +431,65 @@ fun LoginScreen(onLogin: () -> Unit) {
                                 ) {
                                     if (response.isSuccessful && response.body()?.message == "Login successful") {
                                         val userId = userIdInt
-                                        val userName = response.body()?.user?.name ?: username.substringBefore("@")
-                                        val userEmail = response.body()?.user?.email ?: username
 
-                                        if (userId != -1) {
-                                            UserSession.userId = userId
-                                            UserSession.userName = userName
-                                            UserSession.userEmail = userEmail
-                                            UserSession.saveSession(context)
-                                        }
+                                        // 🔹 FETCH FULL USER DETAILS FROM PROFILE API
+                                        api.getUserProfile(userId).enqueue(object : Callback<UserResponse> {
+                                            override fun onResponse(
+                                                profileCall: Call<UserResponse>,
+                                                profileResponse: Response<UserResponse>
+                                            ) {
+                                                if (profileResponse.isSuccessful && profileResponse.body()?.success == true) {
+                                                    // ✅ Use full name from profile API
+                                                    val user = profileResponse.body()?.user
+                                                    UserSession.userId = userId
+                                                    UserSession.userName = user?.name ?: username.substringBefore("@")
+                                                    UserSession.userEmail = user?.email ?: username
 
-                                        Toast.makeText(context, "Login successful! Using User ID: $userId", Toast.LENGTH_SHORT).show()
-                                        onLogin()
+                                                    UserSession.saveSession(context as Activity)
+
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Welcome ${UserSession.userName}!",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+
+                                                    onLogin()
+                                                } else {
+                                                    // Fallback if profile fetch fails
+                                                    UserSession.userId = userId
+                                                    UserSession.userName = username.substringBefore("@")
+                                                    UserSession.userEmail = username
+
+                                                    UserSession.saveSession(context as Activity)
+                                                    onLogin()
+                                                }
+                                            }
+
+                                            override fun onFailure(profileCall: Call<UserResponse>, t: Throwable) {
+                                                // Fallback if profile fetch fails
+                                                UserSession.userId = userId
+                                                UserSession.userName = username.substringBefore("@")
+                                                UserSession.userEmail = username
+
+                                                UserSession.saveSession(context as Activity)
+                                                onLogin()
+                                            }
+                                        })
+                                    } else {
+                                        Toast.makeText(
+                                            context,
+                                            "Login failed: Invalid credentials",
+                                            Toast.LENGTH_LONG
+                                        ).show()
                                     }
                                 }
 
                                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                                    Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(
+                                        context,
+                                        "Login failed: ${t.message}",
+                                        Toast.LENGTH_LONG
+                                    ).show()
                                 }
                             })
                         } else {

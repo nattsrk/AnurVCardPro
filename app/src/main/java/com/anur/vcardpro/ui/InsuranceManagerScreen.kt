@@ -274,7 +274,7 @@ fun EnhancedPolicyCard(policy: com.anur.vcardpro.model.InsurancePolicy) {
 @Composable
 fun PolicyDetailsTab(policy: com.anur.vcardpro.model.InsurancePolicy) {
     Column(modifier = Modifier.padding(16.dp)) {
-        InfoRow("Policyholder:", "Natarajan R", Color.White, FontWeight.Bold)
+        InfoRow("Policyholder:", UserSession.userName, Color.White, FontWeight.Bold)
         InfoRow("Policy Number:", policy.policyNumber, Color.White, FontWeight.Bold)
         InfoRow("Policy Type:", policy.policyType, Color.White, FontWeight.Bold)
         InfoRow("Insurer:", policy.insurerName, Color.White, FontWeight.Bold)
