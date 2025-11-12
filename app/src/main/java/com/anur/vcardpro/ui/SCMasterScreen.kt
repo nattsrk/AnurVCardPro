@@ -113,40 +113,43 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
     var isSyncing by remember { mutableStateOf(false) }
     var syncStatus by remember { mutableStateOf("") }
 
+
     // Write mode states - Card Personalization
-    var vCardSlug by remember { mutableStateOf("nat-123") }
+    var vCardSlug by remember {
+        mutableStateOf("")  // ✅ Start empty
+    }
+    // Write mode - Personal Info
+    var fullName by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var organization by remember { mutableStateOf("") }
+    var jobTitle by remember { mutableStateOf("") }
+    var address by remember { mutableStateOf("") }
 
-    // Personal Info
-    var fullName by remember { mutableStateOf("Test Name") }
-    var phone by remember { mutableStateOf("1234567890") }
-    var email by remember { mutableStateOf("test@example.com") }
-    var organization by remember { mutableStateOf("Test Org") }
-    var jobTitle by remember { mutableStateOf("Software Engineer") }
-    var address by remember { mutableStateOf("123 Main St, City") }
+    // Write mode - Emergency Contact
+    var emergencyName by remember { mutableStateOf("") }
+    var emergencyPhone by remember { mutableStateOf("") }
+    var bloodGroup by remember { mutableStateOf("") }
+    var emergencyLocation by remember { mutableStateOf("") }
+    var emergencyRelationship by remember { mutableStateOf("") }
 
-    // Emergency Contact
-    var emergencyName by remember { mutableStateOf("Emergency Contact") }
-    var emergencyPhone by remember { mutableStateOf("0987654321") }
-    var bloodGroup by remember { mutableStateOf("O+") }
-    var emergencyLocation by remember { mutableStateOf("Mambakkam, Chennai") }
-    var emergencyRelationship by remember { mutableStateOf("Family") }
 
-    // Insurance List (Multiple Records)
+    // Write mode - Insurance List (Multiple Records) - MUTABLE
     var insuranceList by remember {
         mutableStateOf(mutableListOf(
             InsuranceInfo(
-                policyHolder = UserSession.userName,
-                age = "53 years",
-                insurer = "SBI Life Insurance",
-                policyType = "Term Life Insurance",
-                premium = "₹50,000 (Annual)",
-                sumAssured = "₹1,00,00,000 (1 Crore)",
-                policyStart = "20/01/1990",
-                policyEnd = "02/02/2030",
+                policyHolder = "",
+                age = "",
+                insurer = "",
+                policyType = "",
+                premium = "",
+                sumAssured = "",
+                policyStart = "",
+                policyEnd = "",
                 status = "Active",
-                contact = "user@test.com",
-                mobile = "999999990",
-                policyNumber = "POL-L12009"
+                contact = "",
+                mobile = "",
+                policyNumber = "POL/${System.currentTimeMillis()}"
             )
         ))
     }
@@ -558,7 +561,20 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
         }
     }
 
-
+// Auto-populate vCardSlug from card data when available
+    LaunchedEffect(extractedData) {
+        extractedData?.let { data ->
+            // Extract slug from card's Website URL
+            val websiteUrl = data.otherData["Website"] ?: ""
+            if (websiteUrl.isNotEmpty() && vCardSlug.isEmpty()) {
+                // Extract slug from URL like "https://vcard.tecgs.com:3000/profile/sri-123"
+                val slug = websiteUrl.substringAfterLast("/")
+                if (slug.isNotEmpty()) {
+                    vCardSlug = slug  // ✅ Use existing slug from card!
+                }
+            }
+        }
+    }
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -909,7 +925,7 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                         modifier = Modifier.weight(0.35f)
                                     )
                                     Text(
-                                        text = "https://vcard.tecgs.com:3000/profile/$vCardSlug",
+                                        text = data.otherData["Website"] ?: "No URL found on card",
                                         fontSize = 14.sp,
                                         color = Color.White,
                                         modifier = Modifier.weight(0.65f)
@@ -1021,19 +1037,20 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                     Text("🔄 REFRESH BACKEND DATA", fontSize = 16.sp, fontWeight = FontWeight.Bold)
                                 }
                             }
+
                             // Sync Comparison and Buttons
                             syncComparison?.let { comparison ->
                                 if (comparison.needsSync) {
                                     Card(
                                         modifier = Modifier.fillMaxWidth(),
-                                        colors = CardDefaults.cardColors(containerColor = Color(0xFFFFEB3B))
+                                        colors = CardDefaults.cardColors(containerColor = Color(0xFF8B5CF6))  // ✅ Purple theme
                                     ) {
                                         Column(modifier = Modifier.padding(16.dp)) {
                                             Text(
                                                 text = "🔄 SYNC REQUIRED",
                                                 fontSize = 16.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color.Black
+                                                color = Color.White  // ✅ Changed to white
                                             )
                                             Spacer(modifier = Modifier.height(8.dp))
 
@@ -1041,53 +1058,34 @@ fun SCMasterScreen(activity: MainActivity, onBack: () -> Unit) {
                                                 Text(
                                                     text = "• $difference",
                                                     fontSize = 12.sp,
-                                                    color = Color.Black
+                                                    color = Color.White  // ✅ Changed to white
                                                 )
                                             }
 
                                             Spacer(modifier = Modifier.height(16.dp))
 
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                horizontalArrangement = Arrangement.SpaceEvenly
+                                            // ✅ ONLY ONE BUTTON NOW - SYNC TO CARD
+                                            Button(
+                                                onClick = { syncBackendToCard() },
+                                                enabled = !isSyncing,
+                                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEC4899)),  // Pink accent
+                                                modifier = Modifier.fillMaxWidth()
                                             ) {
-                                                Button(
-                                                    onClick = { syncCardToBackend() },
-                                                    enabled = !isSyncing,
-                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6)),
-                                                    modifier = Modifier.weight(1f)
-                                                ) {
-                                                    if (isSyncing) {
-                                                        CircularProgressIndicator(modifier = Modifier.size(20.dp), color = Color.White)
-                                                    } else {
-                                                        Text("SYNC TO BACKEND", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                                                    }
-                                                }
-
-                                                Spacer(modifier = Modifier.width(8.dp))
-
-                                                Button(
-                                                    onClick = { syncBackendToCard() },
-                                                    enabled = !isSyncing,
-                                                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF8B5CF6)),
-                                                    modifier = Modifier.weight(1f)
-                                                ) {
-                                                    Text("SYNC TO CARD", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                                                }
+                                                Text("📥 SYNC TO CARD", fontSize = 14.sp, fontWeight = FontWeight.Bold)
                                             }
                                         }
                                     }
                                 } else {
                                     Card(
                                         modifier = Modifier.fillMaxWidth(),
-                                        colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E8))
+                                        colors = CardDefaults.cardColors(containerColor = Color(0xFFE1BEE7))  // ✅ Light purple
                                     ) {
                                         Column(modifier = Modifier.padding(16.dp)) {
                                             Text(
                                                 text = "✅ DATA IN SYNC",
                                                 fontSize = 16.sp,
                                                 fontWeight = FontWeight.Bold,
-                                                color = Color(0xFF8B5CF6)
+                                                color = Color(0xFF8B5CF6)  // Purple
                                             )
                                             Text(
                                                 text = "Card and backend data are synchronized",
